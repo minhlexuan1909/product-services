@@ -9,7 +9,11 @@
     "test": "docker-compose run --rm app sh -c \"python manage.py test\"",
     "docker": "docker-compose run --rm app sh -c",
     "docker-deploy": "docker-compose -f docker-compose-deploy.yml run --rm app sh -c",
-    "docker-push": "docker tag recipe-app-api-app:latest vuasanban/recipe-app-api-app:latest"
+    "docker-push": "docker tag recipe-app-api-app:latest vuasanban/recipe-app-api-app:latest",
+    "export-product": "npm run docker \"python manage.py fetch_data_product > product.json\"",
+    "import-product": "npm run docker \"cat product.json | python manage.py populate_data_product\"",
+    "export-tag": "npm run docker \"python manage.py fetch_data_tag > tag.json\"",
+    "import-tag": "npm run docker \"cat tag.json | python manage.py populate_data_tag\""
   },
   "repository": {
     "type": "git",

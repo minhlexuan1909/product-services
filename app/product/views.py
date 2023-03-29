@@ -34,6 +34,12 @@ from .serializers import ProductSerializer, ProductDetailSerializer, ProductImag
                 location=OpenApiParameter.QUERY,
                 description="Filter by tags (Comma seperated)",
             ),
+            OpenApiParameter(
+                name="idList",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="Filter by list of id (Comma seperated)",
+            ),
         ],
     ),
     # retrieve=extend_schema(
@@ -71,11 +77,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = self.queryset
         name = self.request.query_params.get("name")
         tags = self.request.query_params.get("tags")
+        idList = self.request.query_params.get("idList")
         if name:
             queryset = queryset.filter(title__icontains=name)
         if tags:
             tag_ids = self._params_to_ints(tags)
             queryset = queryset.filter(tags__id__in=tag_ids)
+        if idList:
+            idList_ids = self._params_to_ints(idList)
+            queryset = queryset.filter(id__in=idList_ids)
         # return self.queryset.order_by("-id")
         return queryset.order_by("-id").distinct()
 

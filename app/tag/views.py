@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core import serializers
 from django.http import JsonResponse
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -25,7 +25,6 @@ class TagViewSet(
     """Manage tags in the database"""
 
     serializer_class = TagSerializer
-    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Tag.objects.all()
 
@@ -42,4 +41,4 @@ class TagViewSet(
         tag_value["products"] = product_in_tag
 
         # tag["products"] = list(product_in_tag)
-        return Response(tag_value)
+        return Response(tag_value, status=status.HTTP_200_OK)

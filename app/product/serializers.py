@@ -17,12 +17,23 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ("id", "title", "price", "link", "image", "tags")
-        read_only_fields = ("id",)
+        fields = (
+            "id",
+            "title",
+            "price",
+            "link",
+            "image",
+            "quantity",
+            "tags",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "created_at", "updated_at")
 
     def _get_or_create_tags(self, tags, product):
         """Handle getting or creating tags"""
         # auth_user = self.context["request"].user
+        print("tags", tags)
         for tag in tags:
             tab_obj, created = Tag.objects.get_or_create(
                 # user=auth_user,
@@ -32,6 +43,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create a new tag"""
+        print("validated_data", validated_data)
         tags = validated_data.pop("tags", [])
         product = Product.objects.create(**validated_data)
         # auth_user = self.context["request"].user
