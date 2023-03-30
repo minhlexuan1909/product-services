@@ -21,6 +21,7 @@ from .serializers import (
     ProductDetailSerializer,
     ProductImageSerializer,
     BookDetailSerializer,
+    ClothesDetailSerializer,
 )
 
 
@@ -163,6 +164,28 @@ class BookViewSet(ProductViewSet):
     def perform_create(self, serializer):
         print("serializer", serializer)
         """Create a new book"""
+        # Attach to user: serializer.save(user=self.request.user)
+        serializer.save()
+        # return Response({})
+
+
+class ClothesViewSet(ProductViewSet):
+    """Manage books in the database"""
+
+    serializer_class = ClothesDetailSerializer
+    queryset = Clothes.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        """Return the serializer class for request"""
+        if self.action == "detail" or self.action == "list":
+            return self.serializer_class
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        print("serializer", serializer)
+        """Create a new clothes"""
         # Attach to user: serializer.save(user=self.request.user)
         serializer.save()
         # return Response({})
