@@ -15,8 +15,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
-from .models import Product
-from .serializers import ProductSerializer, ProductDetailSerializer, ProductImageSerializer
+from .models import Product, Book, Clothes
+from .serializers import (
+    ProductSerializer,
+    ProductDetailSerializer,
+    ProductImageSerializer,
+    BookDetailSerializer,
+)
 
 
 @extend_schema_view(
@@ -117,3 +122,47 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookViewSet(ProductViewSet):
+    """Manage books in the database"""
+
+    serializer_class = BookDetailSerializer
+    queryset = Book.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        """Return the serializer class for request"""
+        if self.action == "detail" or self.action == "list":
+            return BookDetailSerializer
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        print("serializer", serializer)
+        """Create a new book"""
+        # Attach to user: serializer.save(user=self.request.user)
+        serializer.save()
+        # return Response({})
+
+
+class BookViewSet(ProductViewSet):
+    """Manage books in the database"""
+
+    serializer_class = BookDetailSerializer
+    queryset = Book.objects.all()
+    # authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        """Return the serializer class for request"""
+        if self.action == "detail" or self.action == "list":
+            return BookDetailSerializer
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        print("serializer", serializer)
+        """Create a new book"""
+        # Attach to user: serializer.save(user=self.request.user)
+        serializer.save()
+        # return Response({})

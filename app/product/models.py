@@ -33,3 +33,31 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Book(Product):
+    """Book object"""
+
+    author = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+
+SIZE = (
+    ("XS", "XS"),
+    ("S", "S"),
+    ("M", "M"),
+    ("L", "L"),
+    ("XL", "XL"),
+    ("XXL", "XXL"),
+)
+
+
+class Clothes(Product):
+    """Clothes object"""
+
+    size = models.CharField(max_length=255, choices=SIZE)
+
+    def __str__(self):
+        return self.title

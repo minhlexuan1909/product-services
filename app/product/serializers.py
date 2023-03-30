@@ -4,7 +4,7 @@ Serializes for product API
 
 from rest_framework import serializers
 
-from .models import Product
+from .models import Product, Book, Clothes
 
 from tag.serializers import TagSerializer
 from tag.models import Tag
@@ -79,3 +79,39 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ("id", "image")
         read_only_fields = ("id",)
         extra_kwargs = {"image": {"required": True}}
+
+
+class BookDetailSerializer(ProductDetailSerializer):
+    """Serializes a book detail"""
+
+    class Meta(ProductSerializer.Meta):
+        model = Book
+        # More infos about a book (Add author)
+        fields = ProductSerializer.Meta.fields + ("author",)
+
+    def create(self, validated_data):
+        """Create a new tag"""
+        print("validated_data", validated_data)
+        tags = validated_data.pop("tags", [])
+        book = Book.objects.create(**validated_data)
+        # auth_user = self.context["request"].user
+        self._get_or_create_tags(tags, book)
+        return book
+
+
+class ClothesDetailSerializer(ProductDetailSerializer):
+    """Serializes a clothes detail"""
+
+    class Meta(ProductSerializer.Meta):
+        model = Clothes
+        # More infos about a clothes (Add size)
+        fields = ProductSerializer.Meta.fields + ("size",)
+
+    def create(self, validated_data):
+        """Create a new tag"""
+        print("validated_data", validated_data)
+        tags = validated_data.pop("tags", [])
+        clothes = Clothes.objects.create(**validated_data)
+        # auth_user = self.context["request"].user
+        self._get_or_create_tags(tags, clothes)
+        return clothes
