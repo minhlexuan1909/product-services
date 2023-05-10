@@ -48,22 +48,6 @@ from .serializers import (
             ),
         ],
     ),
-    # retrieve=extend_schema(
-    #     parameters=[
-    #         OpenApiParameter(
-    #             name="name",
-    #             type=OpenApiTypes.STR,
-    #             location=OpenApiParameter.QUERY,
-    #             description="Filter by name",
-    #         ),
-    #         OpenApiParameter(
-    #             name="tags",
-    #             type=OpenApiTypes.STR,
-    #             location=OpenApiParameter.QUERY,
-    #             description="Filter by tags",
-    #         ),
-    #     ],
-    # ),
 )
 class ProductViewSet(viewsets.ModelViewSet):
     """Manage products in the database"""
@@ -108,7 +92,9 @@ class ProductViewSet(viewsets.ModelViewSet):
         # Attach to user: serializer.save(user=self.request.user)
         serializer.save()
 
-    # detail=True means that the view will be called on a single object, that means api goes with id like /product/{id}/upload-image (False for a list of objects like /product/upload-image)
+    # detail=True means that the view will be called on a single object,
+    #  that means api goes with id like /product/{id}/upload-image
+    # (False for a list of objects like /product/upload-image)
     @action(methods=["POST"], detail=True, url_path="upload-image")
     def upload_image(self, request, pk=None):
         """Upload an image to a product"""
